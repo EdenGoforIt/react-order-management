@@ -5,6 +5,7 @@ const defaultCartState = {
 	totalAmount: 0,
 };
 const cartReducer = (state, action) => {
+	console.log('state :', action);
 	switch (action.type) {
 		case 'ADD':
 			const updatedItems = state.items.concat(action.item);
