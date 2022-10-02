@@ -1,3 +1,11 @@
+# Introduction
+
+Order management system with React & Redux
+
+
+![image](https://user-images.githubusercontent.com/79078528/193443404-99efaf65-bd86-4256-8be5-0cad77c478df.png)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
