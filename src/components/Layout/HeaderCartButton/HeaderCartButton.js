@@ -8,9 +8,9 @@ const HeaderCartButton = (props) => {
 	const [btnIsHighlighted, setBtnIsHighlighted] = useState(false);
 	const { items } = cartCtx;
 
-	const numberOfCartItems = items.reduce((currentNumber, item) => {
-		return currentNumber + item.amount;
-	}, 0);
+	const totalAmount = items.reduce((totalAmount, item) => {
+		return totalAmount + item.price * item.amount;
+	}, 0).toFixed(2);
 
 	const btnClasses = `${classes.button} ${
 		btnIsHighlighted ? classes.bump : ''
@@ -35,7 +35,7 @@ const HeaderCartButton = (props) => {
 				<CartIcon />
 			</span>
 			<span>Your Cart</span>
-			<span className={classes.badge}>{numberOfCartItems}</span>
+			<span className={classes.badge}>{totalAmount}</span>
 		</button>
 	);
 };
