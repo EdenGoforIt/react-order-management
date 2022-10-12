@@ -1,37 +1,35 @@
 import Card from '../../UI/Card/Card';
 import MealItem from '../MealItem/MealItem';
 import classes from './AvailableMeals.module.css';
-const DUMMY_MEALS = [
-	{
-		id: 'm1',
-		name: 'Sushi',
-		description: 'Finest fish and veggies',
-		price: 22.99,
-	},
-	{
-		id: 'm2',
-		name: 'Schnitzel',
-		description: 'A german specialty!',
-		price: 16.5,
-	},
-	{
-		id: 'm3',
-		name: 'Barbecue Burger',
-		description: 'American, raw, meaty',
-		price: 12.99,
-	},
-	{
-		id: 'm4',
-		name: 'Green Bowl',
-		description: 'Healthy...and green...',
-		price: 18.99,
-	},
-];
+import { useEffect, useState } from 'react';
 
 const AvailableMeals = () => {
-	const mealsList = DUMMY_MEALS.map((meal) => (
-		<MealItem key={meal.id} meal={meal} />
-	));
+	const [meals, setMeals] = useState([]);
+
+	useEffect(() => {
+		const fetchedMeals = async () => {
+			const response = await fetch(
+				'https://recipe-book-ffafc-default-rtdb.firebaseio.com/recipes.json'
+			);
+
+			const responseData = await response.json();
+			const loadedMeals = [];
+			responseData.forEach((item) => {
+				loadedMeals.push({
+					id: item.id,
+					name: item.name,
+					price: item.price,
+					description: item.description,
+				});
+			});
+
+			setMeals(loadedMeals);
+		};
+
+		fetchedMeals();
+	}, []);
+
+	const mealsList = meals.map((meal) => <MealItem key={meal.id} meal={meal} />);
 
 	return (
 		<section className={classes.meals}>
