@@ -22,6 +22,18 @@ const Cart = (props) => {
 	const onCancelHandler = () => {
 		setIsCheckout(false);
 	};
+	const submitOrderHandler = (data) => {
+		// TODO: add loader
+		return;
+		fetch('https://recipe-book-ffafc-default-rtdb.firebaseio.com/orders.json', {
+			method: 'POST',
+			body: JSON.stringify({
+				user: data,
+				orderItems: cartCtx.items,
+			}),
+		}).then();
+	};
+
 	const CartItems = (
 		<ul className={classes['cart-items']}>
 			{cartCtx.items.map((item) => (
@@ -56,7 +68,12 @@ const Cart = (props) => {
 				<span>Total Amount</span>
 				<span>{totalAmount}</span>
 			</div>
-			{isCheckout && <Checkout onCancel={onCancelHandler} />}
+			{isCheckout && (
+				<Checkout
+					onCancel={onCancelHandler}
+					onSubmitCheckout={submitOrderHandler}
+				/>
+			)}
 			{hasItems && !isCheckout && modalActions}
 		</Modal>
 	);
