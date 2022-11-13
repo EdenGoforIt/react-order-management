@@ -7,6 +7,9 @@ import Checkout from './Checkout/Checkout';
 
 const Cart = (props) => {
 	const [isCheckout, setIsCheckout] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [didSubmit, setDidSubmit] = useState(false);
+
 	const cartCtx = useContext(CartContext);
 	const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
 	const hasItems = cartCtx.items.length > 0;
@@ -22,16 +25,25 @@ const Cart = (props) => {
 	const onCancelHandler = () => {
 		setIsCheckout(false);
 	};
-	const submitOrderHandler = (data) => {
-		// TODO: add loader
-		return;
-		fetch('https://recipe-book-ffafc-default-rtdb.firebaseio.com/orders.json', {
+	const submitOrderHandler = async (data) => {
+		setIsSubmitting(true);
+
+		await ('https://recipe-book-ffafc-default-rtdb.firebaseio.com/orders.json',
+		{
 			method: 'POST',
 			body: JSON.stringify({
 				user: data,
 				orderItems: cartCtx.items,
 			}),
-		}).then();
+		});
+		console.log('data :', data);
+
+		setIsSubmitting(false);
+		setDidSubmit(true);
+		cartCtx.clearCart();
+		setTimeout(() => {
+			props.onClose();
+		}, 2000);
 	};
 
 	const CartItems = (
@@ -61,8 +73,9 @@ const Cart = (props) => {
 			)}
 		</div>
 	);
-	return (
-		<Modal onClose={props.onClose}>
+
+	const cartContent = (
+		<>
 			{CartItems}
 			<div className={classes.total}>
 				<span>Total Amount</span>
@@ -75,6 +88,16 @@ const Cart = (props) => {
 				/>
 			)}
 			{hasItems && !isCheckout && modalActions}
+		</>
+	);
+
+	const didSubmitContent = <p>Successfully submitted</p>;
+
+	return (
+		<Modal onClose={props.onClose}>
+			{isSubmitting && didSubmitContent}
+			{!isSubmitting && !didSubmit && cartContent}
+			{!isSubmitting && didSubmit && didSubmitContent}
 		</Modal>
 	);
 };
