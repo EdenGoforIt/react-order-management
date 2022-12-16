@@ -36,7 +36,6 @@ const Cart = (props) => {
 				orderItems: cartCtx.items,
 			}),
 		});
-		console.log('data :', data);
 
 		setIsSubmitting(false);
 		setDidSubmit(true);
